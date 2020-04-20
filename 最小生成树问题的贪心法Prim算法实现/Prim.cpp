@@ -20,19 +20,25 @@ bool Prim() //贪心算法
 	for (i = 0; i < n; ++i)
 	{
 		int min = INT_MAX, v;
-		for (int i = 0; i < n; ++i)
+		for (int j = 0; j < n; ++j)
 		{
-			if (!known[i] && min>dist[i])//寻找未知的最短路径长的顶点
-				min = dist[i], v = i;
+			if (!known[j] && min>dist[j])//寻找未知的最短路径长的顶点
+			{
+				min = dist[j];
+				v = j;
+			}
 		}
-		if (min = INT_MAX) break;//找不到，跳出
+		if (min == INT_MAX) break;//找不到，跳出
 		known[v] = true;//找到将顶点v设置成已知
 		sum += dist[v];
 
 		for (int w = 0; w < n; ++w)
 		{
-			if (known[w] && g[v][w]<INT_MAX && dist[w]>g[v][w])//调整顶点w的最短路径长dist和最短路径的前一顶点_prev
-				dist[w] = g[v][w], _prev[w] = v;
+			if (!known[w] && g[v][w]<INT_MAX && dist[w]>g[v][w])//调整顶点w的最短路径长dist和最短路径的前一顶点_prev
+			{
+				dist[w] = g[v][w];
+				_prev[w] = v;
+			}
 		}
 	}
 	return i == n; //如果选取的顶点个数为n ，成功

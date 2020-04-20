@@ -1,5 +1,6 @@
 /*旅行商问题分支限界法求解*/
 #include<iostream>
+#include<cstring> //'memset' is defined in header <cstring>
 using namespace std;
 const int NoEdge = -1;
 const int MAX = 20;

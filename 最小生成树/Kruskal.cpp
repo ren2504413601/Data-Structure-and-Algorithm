@@ -27,6 +27,9 @@ public:
 		if (s[x] < 0) return x;
 		else return s[x] = find(s[x]);//压缩路径
 	};
+	/**
+	* 这里 unionsets（）完成的是把root1和root2绑定在一起。
+	*/
 	void UnionSets(int root1, int root2)
 	{
 		if (s[root1] > s[root2])
@@ -50,7 +53,11 @@ bool Cmp(const Edge &lhs, const Edge &rhs)
 bool Kruskal()
 {
 	DisjSets ds(n);
-	make_heap(edges.begin(), edges.end(), Cmp);//对边集建堆,从小到大排序
+	// 对边集建堆,从小到大排序
+	// 最大堆是除了根节点节点之外，其它父节点的weight不小于两个子节点的weight
+	// 这里每次需要选择堆中最小的weight，反向建立最小堆。只需要把compare函数中的<更换为>。
+	// 生成最小堆之后，取堆顶的元素就是贪心法中所要求的的边
+	make_heap(edges.begin(), edges.end(), Cmp);
 	int root1, root2;
 	Edge e;
 	while (!edges.empty())
