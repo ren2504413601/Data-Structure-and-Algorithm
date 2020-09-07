@@ -1,47 +1,73 @@
 /**
- *µ¥Ô´×î¶ÌÂ·¾¶ÎÊÌâµÄÌ°ĞÄËã·¨
+ *å•æºæœ€çŸ­è·¯å¾„é—®é¢˜çš„è´ªå¿ƒç®—æ³•
 */
 #include<iostream>
 #include<vector>
 #include<iterator>
 using namespace std;
-const int n = 5;// n:¶¨µã¸öÊı
-// g: Í¼(graph) ÓÃÁÚ½Ó¾ØÕó(adjacent matrix)±íÊ¾
+const int inf = 0x3f3f3f3f;
+const int n = 5;// n:å®šç‚¹ä¸ªæ•°
+// g: å›¾(graph) ç”¨é‚»æ¥çŸ©é˜µ(adjacent matrix)è¡¨ç¤º
 vector <vector<int>> g;
-int s = 0;// s:Ô´µã(source)
-vector <bool> know; //know:¸÷µãÊÇ·ñÒÑÖª×î¶ÌÂ·¾¶
-vector <int> dist; //dist:Ô´µãsµ½¸÷µãµÄ×î¶ÌÂ·¾¶³¤
-vector <int> _prev; //_prev :¸÷µãµ½×î¶ÌÂ·¾¶µÄÇ°Ò»¶¥µã
-void Dijkstra() //Ì°ĞÄËã·¨ÊµÏÖ
+int s = 0;// s:æºç‚¹(source)
+vector <bool> know; //know:å„ç‚¹æ˜¯å¦å·²çŸ¥æœ€çŸ­è·¯å¾„
+vector <int> dist; //dist:æºç‚¹såˆ°å„ç‚¹çš„æœ€çŸ­è·¯å¾„é•¿
+vector <int> _prev; //_prev :å„ç‚¹åˆ°æœ€çŸ­è·¯å¾„çš„å‰ä¸€é¡¶ç‚¹
+void Dijkstra() //è´ªå¿ƒç®—æ³•å®ç°
 {
-	//³õÊ¼»¯know¡¢dist¡¢_prev
-	know.assign(n, false);
-	dist.assign(n, INT_MAX);
+// 	//åˆå§‹åŒ–knowã€distã€_prev
+// 	know.assign(n, false);
+// 	dist.assign(n, INT_MAX);
+// 	_prev.resize(n);
+// 	dist[s] = 0;//åˆå§‹åŒ–æºç‚¹åˆ°è‡ªèº«çš„è·¯å¾„é•¿ä¸º0
+// 	while (1)
+// 	{
+// 		int min = INT_MAX, v = s;
+// 		for (int i = 0; i < n; ++i)
+// 		{
+// 			if (!know[i] && min > dist[i])//å¯»æ‰¾æœªçŸ¥çš„æœ€çŸ­è·¯å¾„é•¿çš„é¡¶ç‚¹v
+// 			{
+// 				min = dist[i];
+// 				v = i;
+// 			}
+// 		}
+// 		if (min == INT_MAX) break; //å¦‚æœæ‰¾ä¸åˆ°ï¼Œé€€å‡º
+// 		know[v] = true; //æ‰¾åˆ°å°†é¡¶ç‚¹vè®¾ç½®ä¸ºå·²çŸ¥
+// 		// éå†æ‰€æœ‰æŒ‡å‘vçš„é¡¶ç‚¹w
+// 		// è°ƒæ•´wçš„æœ€çŸ­è·¯å¾„é•¿dist å’Œæœ€çŸ­è·¯å¾„çš„å‰ä¸€é¡¶ç‚¹ _prev
+// 		for (int w = 0; w < n; ++w)
+// 		{
+// 			if (!know[w] && g[v][w] < INT_MAX && dist[w] > (dist[v] + g[v][w]))
+// 			{
+// 				dist[w] = dist[v] + g[v][w];
+// 				_prev[w] = v;
+// 			}
+// 		}		
+// 	}
 	_prev.resize(n);
-	dist[s] = 0;//³õÊ¼»¯Ô´µãµ½×ÔÉíµÄÂ·¾¶³¤Îª0
-	while (1)
+	dist.assign(n, inf);
+	dist[s] = 0;
+	priority_queue<pr, vector<pr>, greater<pr>> pque;
+
+	pque.push(pr(0, s));
+	while (!pque.empty())
 	{
-		int min = INT_MAX, v = s;
-		for (int i = 0; i < n; ++i)
+		pr p = pque.top();
+		pque.pop();
+		int v = p.second;
+		if (dist[v] < p.first)
 		{
-			if (!know[i] && min > dist[i])//Ñ°ÕÒÎ´ÖªµÄ×î¶ÌÂ·¾¶³¤µÄ¶¥µãv
-			{
-				min = dist[i];
-				v = i;
-			}
+		    continue;
 		}
-		if (min == INT_MAX) break; //Èç¹ûÕÒ²»µ½£¬ÍË³ö
-		know[v] = true; //ÕÒµ½½«¶¥µãvÉèÖÃÎªÒÑÖª
-		// ±éÀúËùÓĞÖ¸ÏòvµÄ¶¥µãw
-		// µ÷ÕûwµÄ×î¶ÌÂ·¾¶³¤dist ºÍ×î¶ÌÂ·¾¶µÄÇ°Ò»¶¥µã _prev
 		for (int w = 0; w < n; ++w)
 		{
-			if (!know[w] && g[v][w] < INT_MAX && dist[w] > (dist[v] + g[v][w]))
-			{
-				dist[w] = dist[v] + g[v][w];
-				_prev[w] = v;
-			}
-		}		
+		    if (g[v][w] < inf && dist[w] > dist[v] + g[v][w])
+		    {
+			dist[w] = dist[v] + g[v][w];
+			pque.emplace(dist[w], w);
+			_prev[w] = v;
+		    }
+		}
 	}
 }
 
@@ -54,8 +80,8 @@ void Print_SP(int v)
 
 int main()
 {
-	g.assign(n, vector<int>(n, INT_MAX));
-	//¹¹½¨Í¼
+	g.assign(n, vector<int>(n, inf));
+	//æ„å»ºå›¾
 	g[0][1] = 10; g[0][3] = 30; g[0][4] = 100;
 	g[1][2] = 50;
 	g[2][4] = 10;
@@ -65,7 +91,7 @@ int main()
 	cout << endl;
 	for (int i = 0; i < n; i++)
 	{
-		if (dist[i] != INT_MAX)
+		if (dist[i] != inf)
 		{
 			cout << s << "->" << i << ":";
 			Print_SP(i);
