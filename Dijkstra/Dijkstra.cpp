@@ -5,6 +5,7 @@
 #include<vector>
 #include<iterator>
 using namespace std;
+typedef pair<int, int> pr; //first是最短距离，second是顶点的编号
 const int inf = 0x3f3f3f3f;
 const int n = 5;// n:定点个数
 // g: 图(graph) 用邻接矩阵(adjacent matrix)表示
